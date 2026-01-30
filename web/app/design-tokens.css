@@ -1,0 +1,85 @@
+/**
+ * Design system tokens
+ * Colors and typography – single source of truth for the design system.
+ */
+
+/* ==========================================================================
+   COLOR TOKENS
+   ========================================================================== */
+
+:root {
+  /* Backgrounds */
+  --color-bg-primary: #0d0d0d;
+  --color-bg-secondary: #141414;
+  --color-bg-tertiary: #141414;
+  --color-bg-inverse: #ffffff;
+
+  /* Border */
+  --color-border-primary: #292929;
+
+  /* Text */
+  --color-text-primary: #f0efed;
+  --color-text-secondary: #aaaaaa;
+  --color-text-primary-inverse: #0d0d0d;
+
+  /* ==========================================================================
+     TYPOGRAPHY TOKENS
+     Font sizes in px; letter-spacing in px (except Label/Small: em for %)
+     ========================================================================== */
+
+  /* Heading / H1 – Inter Regular 27px, -0.5px */
+  --font-heading-h1: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --text-heading-h1: 27px;
+  --text-heading-h1--letter-spacing: -0.5px;
+
+  /* Heading / H2 – Inter Regular 22px, -0.3px */
+  --font-heading-h2: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --text-heading-h2: 22px;
+  --text-heading-h2--letter-spacing: -0.3px;
+
+  /* Label / Medium – Inter Regular 13px, 0.1px */
+  --font-label-medium: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --text-label-medium: 13px;
+  --text-label-medium--letter-spacing: 0.1px;
+
+  /* Label / Large – Inter Medium 14px, -0.3px */
+  --font-label-large: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --text-label-large: 14px;
+  --text-label-large--letter-spacing: -0.3px;
+
+  /* Label / Small – Inter Regular 12px, -0.75% (≈ -0.0075em) */
+  --font-label-small: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --text-label-small: 12px;
+  --text-label-small--letter-spacing: -0.0075em;
+
+  /* Body / Large – Inter Regular 15px, -0.15px */
+  --font-body-large: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --text-body-large: 15px;
+  --text-body-large--letter-spacing: -0.15px;
+
+  /* Chip / tag interactive states (Figma-aligned) */
+  --color-chip-bg-hover: #1a1a1a;
+  --color-chip-border-hover: #333333;
+  --color-chip-bg-active: #222222;
+  --color-chip-border-active: #333333;
+
+  /* Segmented control (nav menu) */
+  --color-segmented-active: #242424;
+  --radius-segmented: 12px;
+  --spacing-segmented: 6px;
+  --spacing-segment-cell: 8px;
+
+  /* ==========================================================================
+     COMPONENT TOKENS
+     ========================================================================== */
+  --radius-pill: 9999px;
+  --radius-card: 8px;
+  --spacing-button-x: 16px;
+  --spacing-button-y: 10px;
+  --spacing-button-x-sm: 12px;
+  --spacing-button-y-sm: 6px;
+  --spacing-tag-x: 12px;
+  --spacing-tag-y: 6px;
+  --spacing-card-gap: 18px;
+  --aspect-card-image: 291 / 360;
+}

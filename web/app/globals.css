@@ -1,26 +1,111 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "./design-tokens.css";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Map design tokens into Tailwind theme for utility generation */
+  --color-bg-primary: var(--color-bg-primary);
+  --color-bg-secondary: var(--color-bg-secondary);
+  --color-bg-tertiary: var(--color-bg-tertiary);
+  --color-bg-inverse: var(--color-bg-inverse);
+  --color-border-primary: var(--color-border-primary);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-primary-inverse: var(--color-text-primary-inverse);
+  --color-chip-bg-hover: var(--color-chip-bg-hover);
+  --color-chip-border-hover: var(--color-chip-border-hover);
+  --color-chip-bg-active: var(--color-chip-bg-active);
+  --color-chip-border-active: var(--color-chip-border-active);
+  --color-segmented-active: var(--color-segmented-active);
+  --radius-segmented: var(--radius-segmented);
+  --spacing-segmented: var(--spacing-segmented);
+  --spacing-segment-cell: var(--spacing-segment-cell);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Typography: font sizes + letter-spacing */
+  --text-heading-h1: var(--text-heading-h1);
+  --text-heading-h1--letter-spacing: var(--text-heading-h1--letter-spacing);
+  --text-heading-h2: var(--text-heading-h2);
+  --text-heading-h2--letter-spacing: var(--text-heading-h2--letter-spacing);
+  --text-label-medium: var(--text-label-medium);
+  --text-label-medium--letter-spacing: var(--text-label-medium--letter-spacing);
+  --text-label-large: var(--text-label-large);
+  --text-label-large--letter-spacing: var(--text-label-large--letter-spacing);
+  --text-label-small: var(--text-label-small);
+  --text-label-small--letter-spacing: var(--text-label-small--letter-spacing);
+  --text-body-large: var(--text-body-large);
+  --text-body-large--letter-spacing: var(--text-body-large--letter-spacing);
+
+  /* Letter-spacing utilities (tracking-*) */
+  --letter-spacing-heading-h1: var(--text-heading-h1--letter-spacing);
+  --letter-spacing-heading-h2: var(--text-heading-h2--letter-spacing);
+  --letter-spacing-label-medium: var(--text-label-medium--letter-spacing);
+  --letter-spacing-label-large: var(--text-label-large--letter-spacing);
+  --letter-spacing-label-small: var(--text-label-small--letter-spacing);
+  --letter-spacing-body-large: var(--text-body-large--letter-spacing);
+
+  /* Font family from layout (Inter) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   Typography utility classes
+   Use these for consistent text styles across the app.
+   ========================================================================== */
+
+.text-style-heading-h1 {
+  font-family: var(--font-heading-h1);
+  font-size: var(--text-heading-h1);
+  letter-spacing: var(--text-heading-h1--letter-spacing);
+  font-weight: 400;
+}
+
+.text-style-heading-h2 {
+  font-family: var(--font-heading-h2);
+  font-size: var(--text-heading-h2);
+  letter-spacing: var(--text-heading-h2--letter-spacing);
+  font-weight: 400;
+}
+
+.text-style-label-medium {
+  font-family: var(--font-label-medium);
+  font-size: var(--text-label-medium);
+  letter-spacing: var(--text-label-medium--letter-spacing);
+  font-weight: 400;
+}
+
+.text-style-label-large {
+  font-family: var(--font-label-large);
+  font-size: var(--text-label-large);
+  letter-spacing: var(--text-label-large--letter-spacing);
+  font-weight: 500;
+}
+
+.text-style-label-small {
+  font-family: var(--font-label-small);
+  font-size: var(--text-label-small);
+  letter-spacing: var(--text-label-small--letter-spacing);
+  font-weight: 400;
+}
+
+.text-style-body-large {
+  font-family: var(--font-body-large);
+  font-size: var(--text-body-large);
+  letter-spacing: var(--text-body-large--letter-spacing);
+  font-weight: 400;
+}
+
+/* Hide native scrollbar while keeping scroll behavior */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
