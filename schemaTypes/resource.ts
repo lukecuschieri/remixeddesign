@@ -1,4 +1,5 @@
 import {defineType, defineField, defineArrayMember} from 'sanity'
+import {orderRankField} from '@sanity/orderable-document-list'
 import {FigmaClipboardInput} from '../components/FigmaClipboardInput'
 
 export default defineType({
@@ -6,6 +7,7 @@ export default defineType({
   title: 'Resource',
   type: 'document',
   fields: [
+    orderRankField({type: 'resource'}),
     defineField({
       name: 'name',
       title: 'Name',

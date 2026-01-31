@@ -1,2 +1,3 @@
-name,application,category,description,imageFilename,sourceName,sourceUrl,tags,uiElements
-Mobile App - Reveri,Reveri,Mobile,testing,reveri-mobile.png,Luke Cuschieri,https://www.reveri.com/,"Data Viz, Light",Date Picker
+name,category,tags,application,uiElements,description,sourceName,sourceUrl,imageFilename,Published
+Pinterest Card,UI Element,Light,Pinterest,Card,,Pinterest,https://www.pinterest.com/,pinterest-card.png,No
+Spotify Podcast Card,UI Element,Color,Spotify,Card,,Spotify,www.spotify.com,podcast-card.png,No

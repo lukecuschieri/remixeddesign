@@ -20,7 +20,7 @@ export type SanityCategory = {
   title: string;
 };
 
-export const RESOURCES_QUERY = `*[_type == "resource"] | order(_createdAt desc) {
+export const RESOURCES_QUERY = `*[_type == "resource"] | order(orderRank) {
   _id,
   name,
   "slug": slug.current,
