@@ -7,6 +7,8 @@ import {
   type SanityResource,
 } from "@/lib/sanity";
 
+export const revalidate = 15;
+
 export default async function Home() {
   const [categories, resources] = await Promise.all([
     client.fetch<SanityCategory[]>(CATEGORIES_QUERY),

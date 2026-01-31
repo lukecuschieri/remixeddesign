@@ -9,6 +9,8 @@ import {
   type SanityResource,
 } from "@/lib/sanity";
 
+export const revalidate = 15;
+
 export default async function ResourcePage({
   params,
 }: {
