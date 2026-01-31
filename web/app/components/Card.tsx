@@ -1,19 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
 import Button from "./Button";
+import RemixInFigmaButton from "./RemixInFigmaButton";
+
+const TOAST_REMIX_DURATION_MS = 3000;
+const TOAST_MESSAGE = "Resource copied. Paste in Figma to remix.";
 
 export interface CardAction {
   label: string;
   onClick?: () => void;
   variant?: "primary" | "secondary";
   icon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export interface CardProps {
   imageSrc?: string;
   imageAlt?: string;
+  /** How the image fits inside the card frame: cover (crop) or contain (letterbox) */
+  imageFit?: "cover" | "contain";
   imageNode?: React.ReactNode;
   /** Overlay text at bottom of image (e.g. resource title) */
   overlayTitle?: string;
@@ -24,6 +31,8 @@ export interface CardProps {
   title?: string;
   description?: string;
   actions?: CardAction[];
+  /** When set, "Remix in Figma" copies this to clipboard on click and shows a toast; when missing, that button is disabled */
+  figmaCode?: string;
   className?: string;
   children?: React.ReactNode;
 }
@@ -31,6 +40,7 @@ export interface CardProps {
 function Card({
   imageSrc,
   imageAlt = "",
+  imageFit = "cover",
   imageNode,
   overlayTitle,
   overlaySubtitle,
@@ -38,12 +48,38 @@ function Card({
   title,
   description,
   actions = [],
+  figmaCode,
   className = "",
   children,
 }: CardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
-  const showOverlay = isHovered && actions.length > 0;
+  const handleRemixClick = useCallback(async () => {
+    if (!figmaCode?.trim()) return;
+    try {
+      const blob = new Blob([figmaCode], { type: "text/html" });
+      await navigator.clipboard.write([new ClipboardItem({ "text/html": blob })]);
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), TOAST_REMIX_DURATION_MS);
+    } catch {
+      // no-op if clipboard fails
+    }
+  }, [figmaCode]);
+
+  const effectiveActions = actions.map((action, i) => {
+    const isRemix = action.label === "Remix in Figma";
+    if (isRemix) {
+      return {
+        ...action,
+        disabled: !figmaCode || !figmaCode.trim(),
+        onClick: figmaCode?.trim() ? handleRemixClick : undefined,
+      };
+    }
+    return action;
+  });
+
+  const showOverlay = isHovered && effectiveActions.length > 0;
   const hasImage = imageSrc ?? imageNode;
   const hasMetadataOverlay =
     overlayTitle ?? overlaySubtitle ?? overlayTag;
@@ -67,7 +103,11 @@ function Card({
               src={imageSrc}
               alt={imageAlt}
               fill
-              className="object-cover transition-opacity duration-200 group-hover:opacity-80"
+              className={
+                imageFit === "contain"
+                  ? "object-contain transition-opacity duration-200 group-hover:opacity-80"
+                  : "object-cover transition-opacity duration-200 group-hover:opacity-80"
+              }
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           ) : null)}
@@ -91,19 +131,32 @@ function Card({
             </div>
           )}
           {showOverlay && (
-            <div className="absolute inset-0 flex items-end justify-center gap-2 bg-black/20 p-3 backdrop-blur-0">
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {actions.map((action, i) => (
-                  <Button
-                    key={i}
-                    variant={action.variant ?? "secondary"}
-                    size="small"
-                    leftIcon={action.icon}
-                    onClick={action.onClick}
-                  >
-                    {action.label}
-                  </Button>
-                ))}
+            <div className="absolute inset-0 flex items-end justify-center bg-black/20 backdrop-blur-0">
+              <div className="w-full pl-4 pr-4 pb-4">
+                <div className="flex w-full items-center gap-2">
+                  {effectiveActions.map((action, i) =>
+                    action.label === "Remix in Figma" ? (
+                      <RemixInFigmaButton
+                        key={i}
+                        className="h-[38px] min-w-0 flex-1 cursor-custom"
+                        onClick={action.onClick}
+                        disabled={action.disabled}
+                      />
+                    ) : (
+                      <Button
+                        key={i}
+                        variant={action.variant ?? "secondary"}
+                        size="small"
+                        leftIcon={action.icon}
+                        className="h-[38px] w-[90px] shrink-0 cursor-custom"
+                        onClick={action.onClick}
+                        disabled={action.disabled}
+                      >
+                        {action.label}
+                      </Button>
+                    )
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -115,6 +168,16 @@ function Card({
         </div>
       )}
       {children}
+
+      {showToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-12 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-[#2E2E2E] px-6 py-3 text-sm font-normal text-white shadow-[0_4px_14px_rgba(0,0,0,0.25)]"
+        >
+          {TOAST_MESSAGE}
+        </div>
+      )}
     </article>
   );
 }

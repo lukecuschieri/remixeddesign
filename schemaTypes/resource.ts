@@ -14,6 +14,13 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'slug',
+      title: 'Slug',
+      description: 'URL-friendly identifier for deep linking (e.g. media-widgets). When empty, resource _id is used in the URL.',
+      type: 'slug',
+      options: { source: 'name', maxLength: 96 },
+    }),
+    defineField({
       name: 'mainImage',
       title: 'Thumbnail / Preview',
       description: 'Supports static images and animated GIFs',
@@ -33,6 +40,12 @@ export default defineType({
         rule.required().uri({
           scheme: ['http', 'https'],
         }),
+    }),
+    defineField({
+      name: 'sourceName',
+      title: 'Source name',
+      description: 'Author or source name shown as link label (e.g. Figma Community)',
+      type: 'string',
     }),
     defineField({
       name: 'description',

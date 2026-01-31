@@ -46,7 +46,16 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Custom default cursor (hotspot at arrow tip); fallback to system cursor if image fails */
+html {
+  cursor: url("/figma-cursor-default.svg") 6 6, auto;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
+  cursor: url("/figma-cursor-default.svg") 6 6, auto;
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
@@ -99,6 +108,11 @@ body {
   font-size: var(--text-body-large);
   letter-spacing: var(--text-body-large--letter-spacing);
   font-weight: 400;
+}
+
+/* Custom cursor utility — use on interactive elements so cursor stays custom on hover */
+.cursor-custom {
+  cursor: url("/figma-cursor-default.svg") 6 6, auto;
 }
 
 /* Hide native scrollbar while keeping scroll behavior */
