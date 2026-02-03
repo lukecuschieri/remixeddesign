@@ -1,9 +1,9 @@
-import { Button, SegmentedControl } from "../components";
+import { Button, Footer, SegmentedControl } from "../components";
 import LogoIcon from "../components/icons/LogoIcon";
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary p-10">
+    <div className="min-h-0 bg-bg-primary text-text-primary pt-10 px-10 pb-10">
       <header className="w-full">
         <div className="flex w-full items-center justify-between pt-0 pb-0">
           <SegmentedControl
@@ -77,7 +77,7 @@ export default function About() {
                   Get Updates
                 </span>
                 <a
-                  href="https://x.com"
+                  href="https://x.com/lukecusc"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-style-label-large text-text-primary underline hover:opacity-80 transition-opacity w-fit"
@@ -89,6 +89,8 @@ export default function About() {
           </div>
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 }

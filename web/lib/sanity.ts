@@ -46,6 +46,16 @@ export type SanityResource = {
   tags: { _id: string; title: string }[] | null;
 };
 
+/**
+ * Append Sanity Image Pipeline params so the CDN serves WebP/AVIF when supported.
+ * Use this URL when displaying images (e.g. in <img src> or Next.js Image).
+ */
+export function sanityImageUrlWithFormat(url: string | null | undefined): string | undefined {
+  if (!url?.trim()) return undefined;
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}auto=format`;
+}
+
 /** Fetch a single resource by slug or _id for modal / deep link. */
 export const RESOURCE_BY_SLUG_QUERY = `*[_type == "resource" && (slug.current == $slug || _id == $slug)][0] {
   _id,

@@ -47,7 +47,14 @@
 }
 
 /* Custom default cursor (hotspot at arrow tip); fallback to system cursor if image fails */
+/* Normal flow: document grows with content so footer stays at end (no flex = no footer in middle). */
 html {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  background: var(--color-bg-primary);
   cursor: url("/figma-cursor-default.svg") 6 6, auto;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -55,6 +62,11 @@ html {
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
   cursor: url("/figma-cursor-default.svg") 6 6, auto;
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
@@ -122,4 +134,15 @@ body {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Override preflight in base layer: content-sized so footer at end of page. */
+@layer base {
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0;
+    overflow: visible;
+  }
 }

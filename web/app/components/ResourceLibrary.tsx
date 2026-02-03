@@ -9,10 +9,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
 import { Card, Chip } from "./index";
 import FigmaIcon from "./icons/FigmaIcon";
-import type { SanityCategory, SanityResource } from "@/lib/sanity";
+import { sanityImageUrlWithFormat, type SanityCategory, type SanityResource } from "@/lib/sanity";
 
 const CARD_ACTIONS_BASE = [
   { label: "Remix in Figma", variant: "primary" as const, icon: <FigmaIcon className="text-text-primary-inverse" /> },
@@ -25,6 +24,7 @@ interface ResourceLibraryContextValue {
   selectedCategoryIds: Set<string>;
   toggleCategory: (categoryId: string) => void;
   filteredResources: SanityResource[];
+  openResourceModal: (slug: string) => void;
 }
 
 const ResourceLibraryContext = createContext<ResourceLibraryContextValue | null>(null);
@@ -38,12 +38,14 @@ function useResourceLibrary() {
 export interface ResourceLibraryProviderProps {
   categories: SanityCategory[];
   resources: SanityResource[];
+  openResourceModal: (slug: string) => void;
   children: ReactNode;
 }
 
 export function ResourceLibraryProvider({
   categories,
   resources,
+  openResourceModal,
   children,
 }: ResourceLibraryProviderProps) {
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<Set<string>>(new Set());
@@ -74,8 +76,9 @@ export function ResourceLibraryProvider({
       selectedCategoryIds,
       toggleCategory,
       filteredResources,
+      openResourceModal,
     }),
-    [categories, resources, selectedCategoryIds, toggleCategory, filteredResources]
+    [categories, resources, selectedCategoryIds, toggleCategory, filteredResources, openResourceModal]
   );
 
   return (
@@ -134,8 +137,7 @@ export function ResourceLibraryTags() {
 }
 
 export function ResourceLibraryGallery() {
-  const { filteredResources } = useResourceLibrary();
-  const router = useRouter();
+  const { filteredResources, openResourceModal } = useResourceLibrary();
 
   const getResourceSlug = useCallback((resource: SanityResource) => {
     return resource.slug ?? resource._id;
@@ -150,13 +152,13 @@ export function ResourceLibraryGallery() {
         const slug = getResourceSlug(resource);
         const actions = CARD_ACTIONS_BASE.map((action) =>
           action.label === "View"
-            ? { ...action, onClick: () => router.push(`/resource/${slug}`) }
+            ? { ...action, onClick: () => openResourceModal(slug) }
             : action
         );
         return (
           <Card
             key={resource._id}
-            imageSrc={resource.imageUrl ?? undefined}
+            imageSrc={sanityImageUrlWithFormat(resource.imageUrl) ?? undefined}
             imageAlt={resource.imageAlt ?? resource.name}
             imageFit="contain"
             title={resource.name}

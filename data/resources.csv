@@ -1,3 +1,7 @@
-name,category,tags,application,uiElements,description,sourceName,sourceUrl,imageFilename,Published
-Pinterest Card,UI Element,Light,Pinterest,Card,,Pinterest,https://www.pinterest.com/,pinterest-card.png,No
-Spotify Podcast Card,UI Element,Color,Spotify,Card,,Spotify,www.spotify.com,podcast-card.png,No
+Published,name,category,tags,application,uiElements,sourceName,sourceUrl,imageFilename,description
+No,Announcement Card - Spotify,UI Element,"Colorful, Dark, Minimal, Music",Spotify,Card,Spotify,https://www.spotify.com/,spotify-annoucement-card.png,
+No,Artist Card - Spotify,UI Element,"Dark, Minimal, Music",Spotify,Card,Spotify,https://www.spotify.com/,spotify-artist-card.png,
+No,Artist Thumbnail - Spotify,UI Element,"Dark, Minimal, Music",Spotify,Thumbnail,Spotify,https://www.spotify.com/,spotify-artist-thumbnail.png,
+No,Playlist Card - Spotify,UI Element,"Dark, Minimal, Music",Spotify,Card,Spotify,https://www.spotify.com/,spotify-playlist-card.png,
+No,Podcast Card - Spotify,UI Element,"Dark, Minimal, Music",Spotify,Card,Spotify,https://www.spotify.com/,spotify-podcast-card.png,
+No,Queue List - Spotify,UI Element,"Dark, Minimal, Music",Spotify,List Item,Spotify,https://www.spotify.com/,spotify-queue.png,

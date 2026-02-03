@@ -10,3 +10,4 @@ export { default as SegmentedControl } from "./SegmentedControl";
 export type { SegmentedControlProps, SegmentedControlItem } from "./SegmentedControl";
 export { default as Card } from "./Card";
 export type { CardProps, CardAction } from "./Card";
+export { default as Footer } from "./Footer";

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import RemixInFigmaButton from "./RemixInFigmaButton";
 import Button from "./Button";
-import type { SanityResource } from "@/lib/sanity";
+import { sanityImageUrlWithFormat, type SanityResource } from "@/lib/sanity";
 
 const TAG_LABEL_CLASS =
   "shrink-0 inline-flex items-center justify-center h-[28px] px-2 rounded-[var(--radius-pill)] bg-[#242424] text-[#AAAAAA] text-[12px] font-normal leading-normal cursor-default";
@@ -174,6 +174,13 @@ export function ResourceViewModal({
   const [remixToast, setRemixToast] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   const list = resources.length > 0 ? resources : (resource ? [resource] : []);
   const currentIndex = list.findIndex((r) => (r.slug ?? r._id) === resourceSlug);
   const hasPrev = currentIndex >= 0 && list.length > 1;
@@ -319,7 +326,7 @@ export function ResourceViewModal({
             {resource.imageUrl ? (
               <div className="absolute inset-6 flex items-center justify-center">
                 <Image
-                  src={resource.imageUrl}
+                  src={sanityImageUrlWithFormat(resource.imageUrl) ?? resource.imageUrl}
                   alt={resource.imageAlt ?? resource.name}
                   fill
                   className="object-contain"
