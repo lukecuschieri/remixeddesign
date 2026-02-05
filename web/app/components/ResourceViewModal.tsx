@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { X, Command, ChevronRight, ChevronLeft } from "lucide-react";
 import RemixInFigmaButton from "./RemixInFigmaButton";
 import Button from "./Button";
 import { sanityImageUrlWithFormat, type SanityResource } from "@/lib/sanity";
@@ -26,63 +27,9 @@ export interface ResourceViewModalProps {
   onClose: () => void;
 }
 
-function CloseIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}
-
-function PrevIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="m15 18-6-6 6-6" />
-    </svg>
-  );
-}
-
-function NextIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  );
-}
+const ICON_STROKE = 1.25;
+const CONTROL_BTN_CLASS =
+  "flex items-center justify-center w-7 h-7 rounded-[4px] text-[#7C7C7C] hover:text-[#FFFFFF] hover:bg-[#292929] transition-colors cursor-custom disabled:opacity-40 disabled:pointer-events-none [&_svg]:shrink-0";
 
 /** Tags row: visible chips up to max width, then "+N more" with tooltip of hidden tags */
 function ModalTags({ tags }: { tags: { _id: string; title: string }[] }) {
@@ -172,7 +119,10 @@ export function ResourceViewModal({
   const router = useRouter();
   const [copyToast, setCopyToast] = useState(false);
   const [remixToast, setRemixToast] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const shortcutsTriggerRef = useRef<HTMLButtonElement>(null);
+  const shortcutsMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -227,7 +177,11 @@ export function ResourceViewModal({
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onClose();
+        if (shortcutsOpen) {
+          setShortcutsOpen(false);
+        } else {
+          onClose();
+        }
         return;
       }
       if (e.key === "ArrowLeft") {
@@ -253,7 +207,20 @@ export function ResourceViewModal({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [onClose, goPrev, goNext, handleRemix, handleCopyLink]);
+  }, [onClose, goPrev, goNext, handleRemix, handleCopyLink, shortcutsOpen]);
+
+  useEffect(() => {
+    if (!shortcutsOpen) return;
+    const onPointerDown = (e: MouseEvent) => {
+      const trigger = shortcutsTriggerRef.current;
+      const menu = shortcutsMenuRef.current;
+      const target = e.target as Node;
+      if (trigger?.contains(target) || menu?.contains(target)) return;
+      setShortcutsOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [shortcutsOpen]);
 
   if (!resource) return null;
 
@@ -291,32 +258,115 @@ export function ResourceViewModal({
             >
               {resource.name}
             </h2>
-            <div className="flex shrink-0 items-center gap-1">
+            <div className="flex shrink-0 items-center gap-2">
               <button
                 type="button"
                 onClick={goPrev}
                 disabled={!hasPrev}
-                className="p-1 rounded-full text-text-primary hover:bg-bg-secondary transition-colors cursor-custom disabled:opacity-40 disabled:pointer-events-none"
+                className={CONTROL_BTN_CLASS}
                 aria-label="Previous resource"
               >
-                <PrevIcon className="w-6 h-6" />
+                <ChevronLeft size={20} strokeWidth={ICON_STROKE} />
               </button>
               <button
                 type="button"
                 onClick={goNext}
                 disabled={!hasNext}
-                className="p-1 rounded-full text-text-primary hover:bg-bg-secondary transition-colors cursor-custom disabled:opacity-40 disabled:pointer-events-none"
+                className={CONTROL_BTN_CLASS}
                 aria-label="Next resource"
               >
-                <NextIcon className="w-6 h-6" />
+                <ChevronRight size={20} strokeWidth={ICON_STROKE} />
               </button>
+              <div className="relative">
+                <button
+                  ref={shortcutsTriggerRef}
+                  type="button"
+                  onClick={() => setShortcutsOpen((o) => !o)}
+                  className={CONTROL_BTN_CLASS}
+                  aria-label="Keyboard shortcuts"
+                  aria-expanded={shortcutsOpen}
+                  aria-haspopup="true"
+                >
+                  <Command size={18} strokeWidth={ICON_STROKE} />
+                </button>
+                {shortcutsOpen && (
+                  <div
+                    ref={shortcutsMenuRef}
+                    className="absolute right-0 top-full mt-1 py-1 min-w-[180px] rounded-[8px] bg-[#242424] border border-[#323232] shadow-lg z-[100]"
+                    role="menu"
+                    aria-label="Keyboard shortcuts"
+                  >
+                    <div className="px-3 py-2 text-[#AAAAAA] text-[11px] font-medium tracking-wide border-b border-[#323232]">
+                      Shortcuts
+                    </div>
+                    <div className="py-1">
+                      <button
+                        type="button"
+                        role="menuitem"
+                        disabled={!hasPrev}
+                        onClick={() => {
+                          goPrev();
+                          setShortcutsOpen(false);
+                        }}
+                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-custom disabled:opacity-40 disabled:pointer-events-none disabled:cursor-default"
+                      >
+                        <span>Previous</span>
+                        <kbd className="shrink-0 px-1.5 py-0.5 rounded bg-[#1a1a1a] text-[#AAAAAA] text-[11px] font-mono">←</kbd>
+                      </button>
+                      <button
+                        type="button"
+                        role="menuitem"
+                        disabled={!hasNext}
+                        onClick={() => {
+                          goNext();
+                          setShortcutsOpen(false);
+                        }}
+                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-custom disabled:opacity-40 disabled:pointer-events-none disabled:cursor-default"
+                      >
+                        <span>Next</span>
+                        <kbd className="shrink-0 px-1.5 py-0.5 rounded bg-[#1a1a1a] text-[#AAAAAA] text-[11px] font-mono">→</kbd>
+                      </button>
+                      <button
+                        type="button"
+                        role="menuitem"
+                        disabled={!resource.figmaCode?.trim()}
+                        onClick={() => {
+                          handleRemix();
+                          setShortcutsOpen(false);
+                        }}
+                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-custom disabled:opacity-40 disabled:pointer-events-none disabled:cursor-default"
+                      >
+                        <span>Remix in Figma</span>
+                        <kbd className="shrink-0 px-1.5 py-0.5 rounded bg-[#1a1a1a] text-[#AAAAAA] text-[11px] font-mono">R</kbd>
+                      </button>
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={() => {
+                          handleCopyLink();
+                          setShortcutsOpen(false);
+                        }}
+                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-custom"
+                      >
+                        <span>Share URL</span>
+                        <kbd className="shrink-0 px-1.5 py-0.5 rounded bg-[#1a1a1a] text-[#AAAAAA] text-[11px] font-mono">S</kbd>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div
+                className="w-px shrink-0 bg-[#323232]"
+                style={{ height: 20 }}
+                aria-hidden
+              />
               <button
                 type="button"
                 onClick={onClose}
-                className="p-1 rounded-full text-text-primary hover:bg-bg-secondary transition-colors cursor-custom"
+                className={CONTROL_BTN_CLASS}
                 aria-label="Close modal"
               >
-                <CloseIcon className="w-6 h-6" />
+                <X size={20} strokeWidth={ICON_STROKE} />
               </button>
             </div>
           </header>

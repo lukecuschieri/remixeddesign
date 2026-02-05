@@ -35,10 +35,10 @@ export default function Footer() {
 
   return (
     <footer
-      className="w-full border-t border-border-primary pt-10 pb-6"
+      className="w-full shrink-0 border-t border-border-primary pt-[40px] pb-[80px]"
       role="contentinfo"
     >
-      <div className="flex flex-col items-center gap-10 text-center">
+      <div className="flex flex-col items-center gap-6 text-center">
         <Link
             href="/"
             className="inline-flex shrink-0 text-text-primary hover:opacity-80 transition-opacity"
@@ -47,8 +47,8 @@ export default function Footer() {
             <FooterLogo className="h-8 w-8" />
         </Link>
         <p
-            className="m-0 flex h-12 shrink-0 items-center justify-center text-text-primary"
-            style={{ fontSize: 24, lineHeight: 34 }}
+            className="m-0 flex h-[50px] shrink-0 items-center justify-center text-text-primary"
+            style={{ fontSize: 24, lineHeight: 1.2 }}
           >
             New resources uploaded weekly
           </p>

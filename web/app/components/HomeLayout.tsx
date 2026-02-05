@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Footer, SegmentedControl } from ".";
 import {
@@ -29,6 +29,7 @@ export function HomeLayout({
 }: HomeLayoutProps) {
   const router = useRouter();
   const [clientModalSlug, setClientModalSlug] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const openResourceModal = useCallback((slug: string) => {
     setClientModalSlug(slug);
@@ -58,49 +59,61 @@ export function HomeLayout({
     : resourceForModal ?? null;
 
   return (
-    <div className="min-h-0 bg-bg-primary text-text-primary pt-10 px-10 pb-10">
-      <ResourceLibraryProvider
-        categories={categories}
-        resources={resources}
-        openResourceModal={openResourceModal}
+    <>
+      <div
+        ref={scrollRef}
+        className="min-h-0 flex-1 overflow-y-auto bg-bg-primary text-text-primary pt-5 px-10 pb-0"
       >
-        <header className="sticky top-0 z-20 -mx-10 -mt-10 w-[calc(100%+5rem)] bg-transparent px-10 pt-10 pb-0">
-          <div className="flex w-full items-center justify-between pt-0 pb-0 min-h-[2.25rem]">
-            <SegmentedControl
-              leading={<LogoIcon className="h-[18px] w-[18px] text-text-primary" />}
-              items={[
-                { label: "Library", href: "/" },
-                { label: "About", href: "/about" },
-              ]}
-            />
-            <a
-              href="https://x.com/lukecusc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-pill)] px-[var(--spacing-button-x)] py-[var(--spacing-button-y)] text-style-label-large bg-bg-inverse text-text-primary-inverse border border-border-primary hover:bg-[#e8e8e8] hover:border-[#1a1a1a] transition-colors"
-            >
-              Follow on <XLogoIcon className="h-[1em] w-[1em] shrink-0" />
-            </a>
-          </div>
-        </header>
+        <div className="flex min-h-full flex-col">
+          <ResourceLibraryProvider
+            categories={categories}
+            resources={resources}
+            openResourceModal={openResourceModal}
+          >
+            <header className="sticky top-0 z-20 w-full shrink-0 bg-transparent -mt-5 pt-5 pb-2">
+            <div className="flex w-full items-center justify-between">
+              <SegmentedControl
+                leading={<LogoIcon className="h-[18px] w-[18px] text-text-primary" />}
+                items={[
+                  { label: "Library", href: "/" },
+                  { label: "About", href: "/about" },
+                ]}
+              />
+              <a
+                href="https://x.com/lukecusc"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-pill)] px-[var(--spacing-button-x)] py-[var(--spacing-button-y)] text-style-label-large bg-bg-inverse text-text-primary-inverse border border-border-primary hover:bg-[#e8e8e8] hover:border-[#1a1a1a] transition-colors"
+              >
+                Follow on <XLogoIcon className="h-[1em] w-[1em] shrink-0" />
+              </a>
+            </div>
+          </header>
 
-        <main className="w-full pt-20 pb-12 md:pb-16">
-          <section className="mb-10 md:mb-12 ml-0 mr-auto max-w-6xl">
-            <h1 className="text-style-heading-h1 text-text-primary max-w-2xl block">
-              Curated Figma resources for your
-              <br />
-              next project. Ready to remix.
-            </h1>
-            <ResourceLibraryTags />
-          </section>
+            <main className="flex min-h-0 flex-1 flex-col w-full pt-20 pb-12 md:pb-16">
+            <section className="mb-10 md:mb-12 ml-0 mr-auto max-w-6xl">
+              <h1 className="text-style-heading-h1 text-text-primary max-w-2xl block">
+                Curated Figma resources for your
+                <br />
+                next project. Ready to remix.
+              </h1>
+              <ResourceLibraryTags />
+            </section>
 
-          <div className="w-full">
-            <ResourceLibraryGallery />
-          </div>
-        </main>
+            <div className="w-full">
+              <ResourceLibraryGallery />
+            </div>
 
-        <Footer />
-      </ResourceLibraryProvider>
+            {/* Spacer: min gap between grid and footer; grows to push footer to bottom when content is short */}
+              <div className="min-h-24 flex-1" aria-hidden />
+            </main>
+
+            <div className="flex shrink-0 flex-col">
+              <Footer />
+            </div>
+          </ResourceLibraryProvider>
+        </div>
+      </div>
 
       {effectiveResourceSlug && effectiveResourceForModal && (
         <ResourceViewModal
@@ -110,6 +123,6 @@ export function HomeLayout({
           onClose={closeResourceModal}
         />
       )}
-    </div>
+    </>
   );
 }
