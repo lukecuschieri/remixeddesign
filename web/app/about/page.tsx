@@ -1,5 +1,6 @@
-import { Button, Footer, SegmentedControl } from "../components";
+import { Footer, SegmentedControl } from "../components";
 import LogoIcon from "../components/icons/LogoIcon";
+import XLogoIcon from "../components/icons/XLogoIcon";
 
 export default function About() {
   return (
@@ -13,9 +14,14 @@ export default function About() {
                 { label: "About", href: "/about" },
               ]}
             />
-            <Button variant="primary" size="medium">
-              Follow
-            </Button>
+            <a
+              href="https://x.com/lukecusc"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-pill)] px-[var(--spacing-button-x)] py-[var(--spacing-button-y)] text-style-label-large bg-bg-inverse text-text-primary-inverse border border-border-primary hover:bg-[#e8e8e8] hover:border-[#1a1a1a] transition-colors"
+            >
+              Follow on <XLogoIcon className="h-[1em] w-[1em] shrink-0" />
+            </a>
           </div>
         </header>
 

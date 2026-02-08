@@ -41,7 +41,7 @@ export default function Footer() {
       <div className="flex flex-col items-center gap-6 text-center">
         <Link
             href="/"
-            className="inline-flex shrink-0 text-text-primary hover:opacity-80 transition-opacity"
+            className="inline-flex shrink-0 text-text-primary"
             aria-label="Remixed Design home"
           >
             <FooterLogo className="h-8 w-8" />

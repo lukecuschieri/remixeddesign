@@ -164,6 +164,7 @@ export function ResourceLibraryGallery() {
             title={resource.name}
             actions={actions}
             figmaCode={resource.figmaCode ?? undefined}
+            onCardClick={() => openResourceModal(slug)}
           />
         );
       })}

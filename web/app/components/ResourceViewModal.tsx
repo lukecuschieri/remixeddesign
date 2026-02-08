@@ -29,7 +29,7 @@ export interface ResourceViewModalProps {
 
 const ICON_STROKE = 1.25;
 const CONTROL_BTN_CLASS =
-  "flex items-center justify-center w-7 h-7 rounded-[4px] text-[#7C7C7C] hover:text-[#FFFFFF] hover:bg-[#292929] transition-colors cursor-custom disabled:opacity-40 disabled:pointer-events-none [&_svg]:shrink-0";
+  "flex items-center justify-center w-7 h-7 rounded-[4px] text-[#7C7C7C] hover:text-[#FFFFFF] hover:bg-[#292929] transition-colors cursor-pointer disabled:opacity-40 disabled:pointer-events-none [&_svg]:shrink-0";
 
 /** Tags row: visible chips up to max width, then "+N more" with tooltip of hidden tags */
 function ModalTags({ tags }: { tags: { _id: string; title: string }[] }) {
@@ -236,18 +236,14 @@ export function ResourceViewModal({
         onClick={handleBackdropClick}
       />
       <div
-        className="fixed z-50 flex items-center justify-center p-[40px] inset-0 pointer-events-none"
+        className="fixed z-50 flex items-center justify-center p-0 min-[580px]:p-[40px] inset-0 pointer-events-none"
         aria-modal
         role="dialog"
         aria-labelledby="resource-modal-title"
       >
         <div
           ref={contentRef}
-          className="pointer-events-auto flex flex-col bg-bg-primary rounded-[24px] overflow-hidden p-[24px]"
-          style={{
-            width: "calc(100vw - 80px)",
-            height: "calc(100vh - 80px)",
-          }}
+          className="pointer-events-auto flex flex-col bg-bg-primary overflow-hidden rounded-none p-4 min-[580px]:rounded-[24px] min-[580px]:p-[24px] w-full h-full min-[580px]:w-[calc(100vw-80px)] min-[580px]:h-[calc(100vh-80px)]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -308,7 +304,7 @@ export function ResourceViewModal({
                           goPrev();
                           setShortcutsOpen(false);
                         }}
-                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-custom disabled:opacity-40 disabled:pointer-events-none disabled:cursor-default"
+                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-pointer disabled:opacity-40 disabled:pointer-events-none disabled:cursor-default"
                       >
                         <span>Previous</span>
                         <kbd className="shrink-0 px-1.5 py-0.5 rounded bg-[#1a1a1a] text-[#AAAAAA] text-[11px] font-mono">←</kbd>
@@ -321,7 +317,7 @@ export function ResourceViewModal({
                           goNext();
                           setShortcutsOpen(false);
                         }}
-                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-custom disabled:opacity-40 disabled:pointer-events-none disabled:cursor-default"
+                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-pointer disabled:opacity-40 disabled:pointer-events-none disabled:cursor-default"
                       >
                         <span>Next</span>
                         <kbd className="shrink-0 px-1.5 py-0.5 rounded bg-[#1a1a1a] text-[#AAAAAA] text-[11px] font-mono">→</kbd>
@@ -334,7 +330,7 @@ export function ResourceViewModal({
                           handleRemix();
                           setShortcutsOpen(false);
                         }}
-                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-custom disabled:opacity-40 disabled:pointer-events-none disabled:cursor-default"
+                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-pointer disabled:opacity-40 disabled:pointer-events-none disabled:cursor-default"
                       >
                         <span>Remix in Figma</span>
                         <kbd className="shrink-0 px-1.5 py-0.5 rounded bg-[#1a1a1a] text-[#AAAAAA] text-[11px] font-mono">R</kbd>
@@ -346,7 +342,7 @@ export function ResourceViewModal({
                           handleCopyLink();
                           setShortcutsOpen(false);
                         }}
-                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-custom"
+                        className="flex w-full items-center justify-between gap-4 px-3 py-1.5 text-left text-[13px] text-[#FFFFFF] hover:bg-[#292929] cursor-pointer"
                       >
                         <span>Share URL</span>
                         <kbd className="shrink-0 px-1.5 py-0.5 rounded bg-[#1a1a1a] text-[#AAAAAA] text-[11px] font-mono">S</kbd>
@@ -391,10 +387,10 @@ export function ResourceViewModal({
             )}
           </div>
 
-          {/* Footer: three fixed-width areas, all bottom-aligned on same baseline */}
-          <footer className="shrink-0 flex items-stretch px-6 py-4">
-            {/* Left: Original Source — fixed width, content at bottom */}
-            <div className="w-[280px] shrink-0 flex flex-col justify-end gap-1 min-w-0">
+          {/* Footer: three areas — stacked at 1020px and below, horizontal row above */}
+          <footer className="shrink-0 flex flex-col min-[1020px]:flex-row min-[1020px]:items-stretch px-6 py-4 gap-6 min-[1020px]:gap-0">
+            {/* Left: Original Source — fixed width on large, full width on small */}
+            <div className="order-2 min-[1020px]:order-none min-[1020px]:w-[280px] shrink-0 flex flex-col justify-end gap-1 min-w-0">
               <span className="text-style-label-small text-text-secondary">
                 Original Source
               </span>
@@ -409,17 +405,17 @@ export function ResourceViewModal({
             </div>
 
             {/* Center: Buttons — max-width 516px, always centered, aligned to bottom */}
-            <div className="flex-1 min-w-0 flex justify-center items-end px-0">
+            <div className="order-1 min-[1020px]:order-none flex-1 min-w-0 flex justify-start min-[1020px]:justify-center items-end px-0">
               <div className="flex items-center gap-3 w-full max-w-[516px]">
                 <RemixInFigmaButton
-                  className="h-[56px] min-h-[56px] flex-1 min-w-0 text-[15px] leading-normal pl-4 pr-6 cursor-custom"
+                  className="h-[56px] min-h-[56px] flex-1 min-w-[200px] whitespace-nowrap text-[15px] leading-normal pl-4 pr-6 cursor-pointer"
                   disabled={!resource.figmaCode?.trim()}
                   onClick={handleRemix}
                 />
                 <Button
                   variant="secondary"
                   size="small"
-                  className="h-[56px] w-[160px] min-h-[56px] min-w-[160px] cursor-custom"
+                  className="h-[56px] w-[160px] min-h-[56px] min-w-[160px] cursor-pointer"
                   onClick={handleCopyLink}
                 >
                   Share URL
@@ -427,8 +423,8 @@ export function ResourceViewModal({
               </div>
             </div>
 
-            {/* Right: Tags — same fixed width, content at bottom */}
-            <div className="w-[280px] shrink-0 flex justify-end items-end min-w-0">
+            {/* Right: Tags — fixed width on large, full width on small */}
+            <div className="order-3 min-[1020px]:order-none min-[1020px]:w-[280px] shrink-0 flex justify-start min-[1020px]:justify-end items-end min-w-0">
               <ModalTags tags={tags} />
             </div>
           </footer>

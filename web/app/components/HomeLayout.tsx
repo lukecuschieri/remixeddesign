@@ -11,6 +11,7 @@ import {
 import { ResourceViewModal } from "./ResourceViewModal";
 import LogoIcon from "./icons/LogoIcon";
 import XLogoIcon from "./icons/XLogoIcon";
+import SearchCommand from "./SearchCommand";
 import type { SanityCategory, SanityResource } from "@/lib/sanity";
 
 export interface HomeLayoutProps {
@@ -78,6 +79,11 @@ export function HomeLayout({
                   { label: "Library", href: "/" },
                   { label: "About", href: "/about" },
                 ]}
+              />
+              <SearchCommand
+                resources={resources}
+                categories={categories}
+                onSelect={openResourceModal}
               />
               <a
                 href="https://x.com/lukecusc"

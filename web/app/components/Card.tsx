@@ -33,6 +33,8 @@ export interface CardProps {
   actions?: CardAction[];
   /** When set, "Remix in Figma" copies this to clipboard on click and shows a toast; when missing, that button is disabled */
   figmaCode?: string;
+  /** Called when the card is clicked outside of action buttons (e.g. to open a detail view) */
+  onCardClick?: () => void;
   className?: string;
   children?: React.ReactNode;
 }
@@ -49,6 +51,7 @@ function Card({
   description,
   actions = [],
   figmaCode,
+  onCardClick,
   className = "",
   children,
 }: CardProps) {
@@ -95,8 +98,9 @@ function Card({
     >
       {hasImage && (
         <div
-          className="relative w-full overflow-hidden bg-bg-primary"
+          className={`relative w-full overflow-hidden bg-bg-primary${onCardClick ? " cursor-pointer" : ""}`}
           style={{ aspectRatio: "291 / 360" }}
+          onClick={onCardClick}
         >
           {imageNode ?? (imageSrc ? (
             <Image
@@ -131,15 +135,18 @@ function Card({
             </div>
           )}
           {showOverlay && (
-            <div className="absolute inset-0 flex items-end justify-center bg-black/20 backdrop-blur-0">
-              <div className="w-full pl-4 pr-4 pb-4">
-                <div className="flex w-full items-center gap-2">
+            <div className="absolute inset-0 flex items-end justify-center bg-black/20 backdrop-blur-0 pointer-events-none">
+              <div className="w-full pl-4 pr-4 pb-4 hidden min-[680px]:block">
+                <div className="flex w-full items-center gap-2 pointer-events-auto">
                   {effectiveActions.map((action, i) =>
                     action.label === "Remix in Figma" ? (
                       <RemixInFigmaButton
                         key={i}
-                        className="h-[38px] min-w-0 flex-1 cursor-custom"
-                        onClick={action.onClick}
+                        className="h-[38px] min-w-0 flex-1 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          action.onClick?.();
+                        }}
                         disabled={action.disabled}
                       />
                     ) : (
@@ -148,8 +155,11 @@ function Card({
                         variant={action.variant ?? "secondary"}
                         size="small"
                         leftIcon={action.icon}
-                        className="h-[38px] w-[90px] shrink-0 cursor-custom"
-                        onClick={action.onClick}
+                        className="h-[38px] w-[90px] shrink-0 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          action.onClick?.();
+                        }}
                         disabled={action.disabled}
                       >
                         {action.label}

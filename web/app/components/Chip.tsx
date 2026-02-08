@@ -37,7 +37,7 @@ const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
         selected &&
           "bg-white !text-black border-transparent hover:bg-white hover:border-transparent hover:!text-black active:bg-white active:border-transparent active:!text-black",
         "disabled:opacity-50 disabled:pointer-events-none",
-        "cursor-custom",
+        "cursor-pointer",
         className,
       ].join(" ")}
       {...props}
